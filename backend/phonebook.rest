@@ -1,0 +1,35 @@
+### 全件取得
+GET http://localhost:3001/api/persons
+
+### info
+GET http://localhost:3001/info
+
+### 個別取得
+GET http://localhost:3001/api/persons/2
+
+### 個別削除
+DELETE http://localhost:3001/api/persons/2
+
+### 正常なPOST
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Tanaka",
+    "number": 1234
+}
+
+### 不正なPOST 1 (プロパティのミス)
+POST http://localhost:3001/api/persons
+Content-Type: text/plain
+
+wao
+
+### 不正なPOST 2（既存のデータと同名）
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Arto Hellas",
+    "number": "123-4567"
+}
