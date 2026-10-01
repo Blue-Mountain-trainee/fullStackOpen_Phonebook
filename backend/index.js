@@ -5,6 +5,7 @@ const app = express()
 
 morgan.token("body", req => JSON.stringify(req.body))
 
+app.use(express.static("dist"))
 app.use(express.json())
 app.use(express.text())
 app.use(
@@ -38,7 +39,7 @@ app.get("/api/persons", (req, res) => {
     res.json(persons)
 })
 
-app.get("/info", (req, res) => {
+app.get("/api/persons/info", (req, res) => {
     res.send(`
         <p>Phonebook has info for ${persons.length} people</p>
         <p>${new Date()}</p>
@@ -94,7 +95,7 @@ const unknownEndpoint = (req, res) => {
 
 app.use(unknownEndpoint)
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log("Server is running...")
 })

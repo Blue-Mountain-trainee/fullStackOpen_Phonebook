@@ -67,36 +67,38 @@ const App = () => {
 
     if (samePersonExists) {
       const isSure = window.confirm(`${oldPerson.name} is already exist, replace old number?`)
+
+      if (!isSure) return
+      
       const newPerson = {
         ...oldPerson,
         number: newNumber
       }
-      if (isSure) {
-        connect
-          .replacePerson(newPerson)
-          .then(resPerson => {
-            console.log("replace data\n", resPerson)
-            showNoticeShortly(`replace ${resPerson.name}'s number`)
-            setPersons(persons.map(person => person.id !== resPerson.id ? person : resPerson))
-          })
-          .catch(e => {
-            console.log("PUT failed!!", e)
-            showNoticeShortly(`"${newName}" has already been removed`)
-            setPersons(persons.filter(person => person.id !== oldPerson.id))
-          })
-      } else { 
-        return 
-      }
-    } else {
       
       connect
-        .createPerson(newPerson)
-        .then(createdPerson => {
-          showNoticeShortly(`"${createdPerson.name}" added`)
-          setPersons(persons.concat(createdPerson))   // persons情報源B
+        .replacePerson(newPerson)
+        .then(resPerson => {
+          console.log("replace data\n", resPerson)
+          showNoticeShortly(`replace ${resPerson.name}'s number`)
+          setPersons(persons.map(person => person.id !== resPerson.id ? person : resPerson))
         })
-        
+        .catch(e => {
+          console.log("PUT failed!!", e)
+          showNoticeShortly(`"${newName}" has already been removed`)
+          setPersons(persons.filter(person => person.id !== oldPerson.id))
+        })
+
+        setNewName("")
+        setNewNumber("")
+        return 
     }
+      
+    connect
+      .createPerson(newPerson)
+      .then(createdPerson => {
+        showNoticeShortly(`"${createdPerson.name}" added`)
+        setPersons(persons.concat(createdPerson))   // persons情報源B
+      })
     
     setNewName("")
     setNewNumber("")
