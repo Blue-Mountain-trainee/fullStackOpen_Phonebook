@@ -110,7 +110,7 @@ const App = () => {
       .then(
         res => {
           console.log("delete item", res)
-          showNoticeShortly(`"${res.data.name}" deleted`)
+          showNoticeShortly(`"${selectPerson.name}" deleted`)
           setPersons(persons.filter(person => person.id !== selectPerson.id))  // persons情報源
         },
         err => console.log(err)
