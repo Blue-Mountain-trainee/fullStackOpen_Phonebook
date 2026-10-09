@@ -1,3 +1,8 @@
+/*
+ *  Mongooseの練習用環境
+ *  ほかのコードとは無関係
+ */
+
 const mongoose = require("mongoose")
 
 // ネットワーク問題のローカルな回避策．いずれ削除予定

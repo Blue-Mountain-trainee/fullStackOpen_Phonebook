@@ -1,0 +1,63 @@
+### 全件取得
+GET http://localhost:3001/api/persons
+
+### info
+GET http://localhost:3001/info
+
+### 個別取得
+######（有効なID）
+GET http://localhost:3001/api/persons/6ac19a2f4281786fd0ab4dc2
+
+######（不正なID）
+GET http://localhost:3001/api/persons/2
+
+### 個別削除
+######（有効なID）
+DELETE http://localhost:3001/api/persons/6ac5df22de9f84c5d31a38bb
+
+######（不正なID）
+DELETE http://localhost:3001/api/persons/2
+
+### 新規作成
+###### 正常なリクエストボディ
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Tanaka",
+    "number": 1234
+}
+
+###### 不正なリクエストボディ1（プロパティのミス）
+POST http://localhost:3001/api/persons
+Content-Type: text/plain
+
+wao
+
+###### 不正なリクエストボディ2（既存のデータと同名）
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Arto Hellas",
+    "number": "123-4567"
+}
+
+### 既存人物の番号変更
+###### 正常
+PUT http://localhost:3001/api/persons/6ac1ad8a8041f94ecd217802
+Content-Type: application/json
+
+{
+    "name": "wao",
+    "number": "9876"
+}
+
+###### 不正なID
+PUT http://localhost:3001/api/persons/2
+Content-Type: application/json
+
+{
+    "name": "wao",
+    "number": "7777"
+}
