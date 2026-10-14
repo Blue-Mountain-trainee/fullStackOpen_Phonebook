@@ -43,6 +43,42 @@ Content-Type: application/json
     "number": "123-4567"
 }
 
+###### 不正なリクエスト（nameバリデーション違反）
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "wa",
+    "number": "2222"
+}
+
+###### 不正なリクエスト（numberバリデーション違反）
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Nikaido",
+    "number": "22"
+}
+
+###### 不正なリクエスト（name, numberバリデーション違反）
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Em",
+    "number": "22"
+}
+
+###### 不正なリクエスト（name 型のバリデーション違反）
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": [1,2,3],
+    "number": "223344"
+}
+
 ### 既存人物の番号変更
 ###### 正常
 PUT http://localhost:3001/api/persons/6ac1ad8a8041f94ecd217802

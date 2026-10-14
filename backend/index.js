@@ -26,7 +26,6 @@ app.get("/info", (req, res) => {
             const line2 = `<p>${new Date()}</p>`
             res.send(line1 + line2)
         })
-
 })
 
 app.get("/api/persons/:id", (req, res, next) => { // mongoosed
@@ -40,16 +39,19 @@ app.get("/api/persons/:id", (req, res, next) => { // mongoosed
 })
 
 app.delete("/api/persons/:id", (req, res, next) => { // mongoosed
+  console.log("DELETE handler called")
   const id = req.params.id
   Person.findByIdAndDelete(id)
     .then(person => {
-      if (!person) return res.status(404).end()
+      if (!person) {
+        return res.status(404).json({ message: "This has already been removed"})
+      }
       res.status(204).end()
     })
     .catch(e => next(e))
 })
 
-app.post("/api/persons", async (req, res) => { // mongoosed
+app.post("/api/persons", async (req, res, next) => { // mongoosed
   const body = req.body
 
   if (!body.name || !body.number) {
@@ -66,11 +68,12 @@ app.post("/api/persons", async (req, res) => { // mongoosed
     name: body.name,
     number: body.number
   })
-  console.log("model intance:\n", person)
-  person.save().then(savedPerson => {
-    console.log("save result:\n", savedPerson)
-    res.json(savedPerson)
-  })
+
+  person.save()
+    .then(savedPerson => {
+      res.json(savedPerson)
+    })
+    .catch(e => next(e))
 })
 
 app.put("/api/persons/:id", (req, res, next) => {
@@ -96,8 +99,18 @@ app.use(unknownEndpoint)
 const errorhandler = (error, req, res, next) => {
   console.error(error.name)
 
+  debugger;
+
   if (error.name === "CastError") {
     return res.status(400).send({ error: "malformatted id" })
+  }
+
+  if (error.name === "ValidationError") {
+    return res.status(400).send(error)
+  }
+
+  else {
+    return res.status(400).send(error)
   }
 
   next(error)

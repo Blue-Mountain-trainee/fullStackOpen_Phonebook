@@ -83,9 +83,11 @@ const App = () => {
           setPersons(persons.map(person => person.id !== resPerson.id ? person : resPerson))
         })
         .catch(e => {
-          console.log("PUT failed!!", e)
+          console.log("!PUT failed!")
+          console.log("Axios: ", e)
+          console.log("Mongoose: ", e.response.data)
           showNoticeShortly(`"${newName}" has already been removed`)
-          setPersons(persons.filter(person => person.id !== oldPerson.id))
+          // setPersons(persons.filter(person => person.id !== oldPerson.id))
         })
 
         setNewName("")
@@ -99,6 +101,12 @@ const App = () => {
         showNoticeShortly(`"${createdPerson.name}" added`)
         setPersons(persons.concat(createdPerson))   // persons情報源B
       })
+      .catch(e => {
+        console.log("!Error catched!")
+        console.log("Axios says: ", e)
+        console.log("Response says: ", e.response.data.message)
+        showNoticeShortly(e.response.data.message)
+      })
     
     setNewName("")
     setNewNumber("")
@@ -107,14 +115,17 @@ const App = () => {
   const handleDeletePerson = (selectPerson) => {
     connect
       .deletePerson(selectPerson)
-      .then(
-        res => {
-          console.log("delete item", res)
-          showNoticeShortly(`"${selectPerson.name}" deleted`)
-          setPersons(persons.filter(person => person.id !== selectPerson.id))  // persons情報源
-        },
-        err => console.log(err)
-      )
+      .then(res => {
+        console.log("delete item", res)
+        showNoticeShortly(`"${selectPerson.name}" deleted`)
+        setPersons(persons.filter(person => person.id !== selectPerson.id))  // persons情報源
+      })
+      .catch(err => {
+        console.log("Axios: ", err)
+        console.log("Mongoose: ", err.response.data.message)
+        showNoticeShortly(err.response.data.message)
+        setPersons(persons.filter(person => person.id !== selectPerson.id))  // persons情報源
+      })
   }
   
   return (
